@@ -4,36 +4,44 @@ import { Contact } from '../model/contact.interface';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ContactService {
   private http = inject(HttpClient);
 
-  list(page: number, size: number): Observable<any> {
-    const params = new HttpParams()
-    .set('page', page.toString())
-    .set('size', size.toString());
+  list(page: number, size: number, search?: any): Observable<any> {
+    let params = new HttpParams();
+    params = params.set('page', page.toString())
+    params = params.set('size', size.toString())
 
-    return this.http.get<any>('http://localhost:8080/api/contacts', {params});
+    if (search !== undefined) {
+      params = params.set('search', search);      
+    }
+
+    return this.http.get<any>('http://localhost:8080/api/contacts/search', {
+      params,
+    });
   }
 
-  // list(){
-  //   return this.http.get<Contact[]>('http://localhost:8080/api/contacts');
-  // }
-
-  get (id: number){
+  get(id: number) {
     return this.http.get<Contact>(`http://localhost:8080/api/contacts/${id}`);
   }
 
-  create(contact: any){
-    return this.http.post<Contact>('http://localhost:8080/api/contacts', contact);
+  create(contact: any) {
+    return this.http.post<Contact>(
+      'http://localhost:8080/api/contacts',
+      contact
+    );
   }
 
-  update(id: number, contact: any){
-    return this.http.put<Contact>(`http://localhost:8080/api/contacts/${id}`, contact);
+  update(id: number, contact: any) {
+    return this.http.put<Contact>(
+      `http://localhost:8080/api/contacts/${id}`,
+      contact
+    );
   }
 
-  delete(id: number){
+  delete(id: number) {
     return this.http.delete<void>(`http://localhost:8080/api/contacts/${id}`);
   }
 }

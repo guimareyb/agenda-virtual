@@ -24,11 +24,11 @@ public class ContactController {
     }
 
     @GetMapping("/search")
-    public Page<Contact> searchContacts(@RequestParam(required = false) String name, @RequestParam(required = false) String email,Pageable pageable) {
-        if (name == null && email == null) {
+    public Page<Contact> searchContacts( @RequestParam(required = false) String search,Pageable pageable) {
+        if (search == null) {
             return contactService.findAll(pageable);
         } else {
-            return contactService.findByNameOrEmail(pageable, name, email);
+            return contactService.findByNameOrEmail(pageable, search);
         }
     }
 

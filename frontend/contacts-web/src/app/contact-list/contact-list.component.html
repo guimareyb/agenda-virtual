@@ -2,8 +2,8 @@
     <h3>Mis contactos</h3>
 
     <div class="mt-3 d-flex justify-content-between">
-        
-        <form>
+
+        <form [formGroup]="formSearch" (ngSubmit)="searching()">
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Buscar por nombre" id="search" formControlName="search">
                 <button class="btn btn-primary">
@@ -11,8 +11,8 @@
                 </button>
             </div>
         </form>
-        
-        <button class="btn btn-outline-primary"  routerLink="/new">
+
+        <button class="btn btn-outline-primary" routerLink="/new">
             Nuevo Contacto
         </button>
     </div>
@@ -30,27 +30,29 @@
         </tr>
     </thead>
     <TBody>
-        @for (contact of contacts| paginate: { itemsPerPage: pageSize, currentPage: currentPage, totalItems: totalItems }; track contact.id) {
-            <tr>
-                <td>{{contact.id}}</td>
-                <td>{{contact.name}}</td>
-                <td>{{contact.email}}</td>
-                <td>{{contact.createAt | date:'dd/MM/yyyy hh:mm a'}}</td>
-                <td class="text-end">
-                    <div class="btn-group">
-                        <button class="btn btn-primary" [routerLink]="[contact.id, 'edit']">
-                            Editar
-                        </button>
-                        <button class="btn btn-danger" (click)="deleteContact(contact)">
-                            Eliminar
-                        </button>
-                    </div>
-                </td>
-            </tr>
+        @for (contact of contacts| paginate: { itemsPerPage: pageSize, currentPage: currentPage, totalItems: totalItems
+        }; track contact.id) {
+        <tr>
+            <td>{{contact.id}}</td>
+            <td>{{contact.name}}</td>
+            <td>{{contact.email}}</td>
+            <td>{{contact.createAt | date:'dd/MM/yyyy hh:mm a'}}</td>
+            <td class="text-end">
+                <div class="btn-group">
+                    <button class="btn btn-primary" [routerLink]="[contact.id, 'edit']">
+                        Editar
+                    </button>
+                    <button class="btn btn-danger" (click)="deleteContact(contact)">
+                        Eliminar
+                    </button>
+                </div>
+            </td>
+        </tr>
         }
     </TBody>
 </table>
 
 <div class="d-flex justify-content-center">
-    <pagination-controls (pageChange)="pageChange($event)" previousLabel="Anterior" nextLabel="Siguiente">   </pagination-controls>
+    <pagination-controls (pageChange)="pageChange($event)" previousLabel="Anterior" nextLabel="Siguiente" [responsive]="true">
+    </pagination-controls>
 </div>

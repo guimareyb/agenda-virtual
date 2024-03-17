@@ -23,8 +23,8 @@ public class ContactService {
         return contactRepository.findAll(pageable);
     }
 
-    public Page<Contact> findByNameOrEmail(Pageable pageable, String name, String email){
-        return contactRepository.findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(pageable, name, email);
+    public Page<Contact> findByNameOrEmail(Pageable pageable, String search){
+        return contactRepository.findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(pageable, search, search);
     }
 
     public Contact findById(Integer id){
