@@ -4,6 +4,8 @@ import com.guima.contactsapi.dto.ContactDTO;
 import com.guima.contactsapi.entity.Contact;
 import com.guima.contactsapi.service.ContactService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +19,17 @@ public class ContactController {
     private final ContactService contactService;
 
     @GetMapping
-    public Iterable<Contact> List(){
-        return contactService.findAll();
+    public Page<Contact> List(Pageable pageable){
+        return contactService.findAll(pageable);
+    }
+
+    @GetMapping("/search")
+    public Page<Contact> searchContacts(@RequestParam(required = false) String name, @RequestParam(required = false) String email,Pageable pageable) {
+        if (name == null && email == null) {
+            return contactService.findAll(pageable);
+        } else {
+            return contactService.findByNameOrEmail(pageable, name, email);
+        }
     }
 
     @GetMapping("{id}")

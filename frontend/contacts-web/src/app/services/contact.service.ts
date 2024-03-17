@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Contact } from '../model/contact.interface';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,9 +9,17 @@ import { Contact } from '../model/contact.interface';
 export class ContactService {
   private http = inject(HttpClient);
 
-  list(){
-    return this.http.get<Contact[]>('http://localhost:8080/api/contacts');
+  list(page: number, size: number): Observable<any> {
+    const params = new HttpParams()
+    .set('page', page.toString())
+    .set('size', size.toString());
+
+    return this.http.get<any>('http://localhost:8080/api/contacts', {params});
   }
+
+  // list(){
+  //   return this.http.get<Contact[]>('http://localhost:8080/api/contacts');
+  // }
 
   get (id: number){
     return this.http.get<Contact>(`http://localhost:8080/api/contacts/${id}`);

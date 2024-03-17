@@ -6,6 +6,8 @@ import com.guima.contactsapi.exception.ResourceNotFoundException;
 import com.guima.contactsapi.repository.ContactRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,8 +19,12 @@ public class ContactService {
     private final ContactRepository contactRepository;
     private final ModelMapper mapper;
 
-    public Iterable<Contact> findAll(){
-        return contactRepository.findAll();
+    public Page<Contact> findAll(Pageable pageable){
+        return contactRepository.findAll(pageable);
+    }
+
+    public Page<Contact> findByNameOrEmail(Pageable pageable, String name, String email){
+        return contactRepository.findByNameContainingIgnoreCaseOrEmailContainingIgnoreCase(pageable, name, email);
     }
 
     public Contact findById(Integer id){
